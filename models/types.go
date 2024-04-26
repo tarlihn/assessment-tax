@@ -11,7 +11,10 @@ type RequestBody struct {
 	Allowances  []Allowance `json:"allowances"`
 }
 
-type ResponseBody struct {
-	Tax       float64 `json:"tax"`
-	TaxRefund float64 `json:"taxRefund,omitempty"`
+type Textponse struct {
+	Tax float64 `json:"tax"`
+}
+
+type RefundResponse struct {
+	Refund float64 `json:"refund"`
 }
