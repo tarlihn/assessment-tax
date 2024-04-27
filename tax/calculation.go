@@ -4,11 +4,33 @@ import (
 	"github.com/tarlihn/assessment-tax/models"
 )
 
-const personalDeduction = 60000
+const (
+	personalDeduction = 60000
+	maxDonation       = 100000
+	maxKReceipt       = 100000
+)
 
-func CalculateTax(totalIncome, wht float64) (interface{}, error) {
+func CalculateTax(totalIncome, wht float64, allowances []models.Allowance) (interface{}, error) {
 	// Calculate net income
 	netIncome := totalIncome - personalDeduction
+
+	// Deduct allowances, ensuring they don't exceed the maximum values
+	var totalDonation, totalKReceipt float64
+	for _, allowance := range allowances {
+		switch allowance.AllowanceType {
+		case "donation":
+			if allowance.Amount > maxDonation {
+				allowance.Amount = maxDonation
+			}
+			totalDonation += allowance.Amount
+		case "k-receipt":
+			if allowance.Amount > maxKReceipt {
+				allowance.Amount = maxKReceipt
+			}
+			totalKReceipt += allowance.Amount
+		}
+		netIncome -= allowance.Amount
+	}
 
 	// Apply tax rates based on income brackets
 	var tax float64
