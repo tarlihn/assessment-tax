@@ -11,7 +11,7 @@ type RequestBody struct {
 	Allowances  []Allowance `json:"allowances"`
 }
 
-type Textponse struct {
+type TextResponse struct {
 	Tax float64 `json:"tax"`
 }
 

@@ -29,10 +29,10 @@ func CalculateTax(totalIncome, wht float64) (interface{}, error) {
 	tax -= wht
 	// var response interface{}
 	if tax < 0 {
-		return models.RefundResponse{Refund: tax}, nil
+		return models.RefundResponse{Refund: -tax}, nil
 	}
 
-	return models.Textponse{Tax: tax}, nil
+	return models.TextResponse{Tax: tax}, nil
 
 	// Marshal the TaxResponse struct to JSON
 	// jsonData, err := json.Marshal(response)
