@@ -34,11 +34,4 @@ func CalculateTax(totalIncome, wht float64) (interface{}, error) {
 
 	return models.TextResponse{Tax: tax}, nil
 
-	// Marshal the TaxResponse struct to JSON
-	// jsonData, err := json.Marshal(response)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// return jsonData, nil
 }
