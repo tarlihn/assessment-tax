@@ -10,7 +10,7 @@ const (
 	maxKReceipt = 100000
 )
 
-func CalculateTax(totalIncome, wht float64, allowances []models.Allowance) (interface{}, error) {
+func CalculateTaxLevel(totalIncome, wht float64, allowances []models.Allowance) (interface{}, error) {
 	personalDeduction, _ := database.GetPersonalDeduction()
 	taxLevels := []models.TaxLevel{
 		{Level: "0-150,000", Tax: 0},
