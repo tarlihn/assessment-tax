@@ -5,7 +5,7 @@ type Allowance struct {
 	Amount        float64 `json:"amount"`
 }
 
-type RequestBody struct {
+type UserRequest struct {
 	TotalIncome float64     `json:"totalIncome"`
 	WHT         float64     `json:"wht"`
 	Allowances  []Allowance `json:"allowances"`
@@ -26,4 +26,16 @@ type RefundResponse struct {
 type TaxLevel struct {
 	Level string  `json:"level"`
 	Tax   float64 `json:"tax"`
+}
+
+type AdminRequest struct {
+	Amount float64 `json:"amount"`
+}
+
+type AdminResponse struct {
+	PersonalDeduction float64 `json:"personalDeduction"`
+}
+
+type Error struct {
+	Message string `json:"message"`
 }

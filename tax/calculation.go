@@ -1,16 +1,20 @@
 package tax
 
 import (
+	"github.com/tarlihn/assessment-tax/database"
 	"github.com/tarlihn/assessment-tax/models"
 )
 
 const (
-	personalDeduction = 60000
-	maxDonation       = 100000
-	maxKReceipt       = 100000
+	maxDonation = 100000
+	maxKReceipt = 100000
 )
 
 func CalculateTax(totalIncome, wht float64, allowances []models.Allowance) (interface{}, error) {
+	personalDeduction, err := database.GetPersonalDeduction(database.DB)
+	if err != nil {
+		return nil, err
+	}
 
 	taxLevels := []models.TaxLevel{
 		{Level: "0-150,000", Tax: 0},

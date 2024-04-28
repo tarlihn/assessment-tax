@@ -3,7 +3,7 @@ package database
 import "log"
 
 func InitDB() {
-	db, _ := ConnectDB()
+	db := DB
 	var err error
 	createTb := `CREATE TABLE IF NOT EXISTS allowance ( id SERIAL PRIMARY KEY, personalDeduction INT);`
 	_, err = db.Exec(createTb)
