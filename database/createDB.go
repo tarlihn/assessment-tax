@@ -18,7 +18,7 @@ func createDB() error {
 	// Database connection successful
 	log.Println("Connected to the database successfully!")
 
-	createTb := `CREATE TABLE IF NOT EXISTS allowance ( id SERIAL PRIMARY KEY, personalDeduction INT);`
+	createTb := `CREATE TABLE IF NOT EXISTS allowance ( id SERIAL PRIMARY KEY, personalDeduction FLOAT, kReceipt FLOAT);`
 	_, err = p.Db.Exec(createTb)
 
 	if err != nil {
@@ -26,7 +26,7 @@ func createDB() error {
 	}
 	fmt.Println("create table success")
 
-	row := p.Db.QueryRow("INSERT INTO  allowance (personalDeduction) values ($1)  RETURNING id", 60000)
+	row := p.Db.QueryRow("INSERT INTO allowance (personalDeduction, kReceipt) values ($1, $2) RETURNING id", 60000, 50000)
 	var id int
 	err = row.Scan(&id)
 	if err != nil {

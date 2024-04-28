@@ -47,3 +47,44 @@ func UpdatePersonalDeduction(c echo.Context) error {
 	// Return the response with HTTP status OK (200)
 	return c.JSON(http.StatusOK, &models.AdminResponse{PersonalDeduction: amount})
 }
+
+func UpdateMaximumKReceipt(c echo.Context) error {
+	var amount float64
+	// Establish connection to the database
+	p, err := ConnectDB()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer p.Db.Close()
+
+	reqAdmin := new(models.AdminRequest)
+
+	// Bind the request body to the RequestBody struct
+	if err := c.Bind(reqAdmin); err != nil {
+		return c.JSON(http.StatusBadRequest, &models.Error{Message: err.Error()})
+	}
+
+	// Extract the amount from the RequestBody struct
+	if reqAdmin.Amount > 100000 {
+		amount = 100000
+	} else if reqAdmin.Amount < 0 {
+		amount = 1
+	} else {
+		amount = reqAdmin.Amount
+	}
+	// Execute SQL statement to update kReceipt in the database
+	stmt, err := p.Db.Prepare(`UPDATE allowance SET kReceipt = $1`)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, &models.Error{Message: err.Error()})
+	}
+
+	if _, err := stmt.Exec(amount); err != nil {
+		return c.JSON(http.StatusInternalServerError, &models.Error{Message: err.Error()})
+	}
+
+	// Prepare the desired response format
+	response := map[string]float64{"kReceipt": amount}
+
+	// Return the response with HTTP status OK (200)
+	return c.JSON(http.StatusOK, response)
+}

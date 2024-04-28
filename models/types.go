@@ -36,6 +36,10 @@ type AdminResponse struct {
 	PersonalDeduction float64 `json:"personalDeduction"`
 }
 
+type AdminResponseKReciept struct {
+	KReciept float64 `json:"kReciept"`
+}
+
 type Error struct {
 	Message string `json:"message"`
 }
