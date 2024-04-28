@@ -64,6 +64,7 @@ func main() {
 	// User Routes
 	// tax := e.Group("/tax")
 	e.POST("/tax/calculation", tax.TaxController)
+	e.POST("/tax/calculations/upload-csv", tax.CalculateTaxFromCSV)
 
 	//Admin Routes
 	admin := e.Group("/admin")

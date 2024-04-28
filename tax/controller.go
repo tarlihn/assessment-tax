@@ -14,7 +14,7 @@ func TaxController(c echo.Context) error {
 	}
 
 	// Prepare response
-	result, _ := CalculateTax(req.TotalIncome, req.WHT, req.Allowances)
+	result, _ := CalculateTaxLevel(req.TotalIncome, req.WHT, req.Allowances)
 
 	// Prepare response
 
