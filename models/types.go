@@ -11,10 +11,19 @@ type RequestBody struct {
 	Allowances  []Allowance `json:"allowances"`
 }
 
-type TextResponse struct {
-	Tax float64 `json:"tax"`
+// TaxResponse struct represents the response body for tax calculations
+type TaxResponse struct {
+	Tax      float64    `json:"tax"`
+	TaxLevel []TaxLevel `json:"taxLevel"`
 }
 
 type RefundResponse struct {
-	Refund float64 `json:"refund"`
+	Refund   float64    `json:"refund"`
+	TaxLevel []TaxLevel `json:"taxLevel"`
+}
+
+// TaxLevel struct represents a tax level with its corresponding tax amount
+type TaxLevel struct {
+	Level string  `json:"level"`
+	Tax   float64 `json:"tax"`
 }
