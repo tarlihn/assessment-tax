@@ -80,6 +80,7 @@ func main() {
 		return username == adminUsername && password == adminPassword, nil
 	}))
 	admin.POST("/deductions/personal", database.UpdatePersonalDeduction)
+	admin.POST("/deductions/k-receipt", database.UpdateMaximumKReceipt)
 
 	// Retrieve port from environment variable or default to 8080
 	port := os.Getenv("PORT")

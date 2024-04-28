@@ -7,11 +7,13 @@ import (
 
 const (
 	maxDonation = 100000
-	maxKReceipt = 100000
+	minDonation = 0
+	minKReceipt = 1
 )
 
 func CalculateTaxLevel(totalIncome, wht float64, allowances []models.Allowance) (interface{}, error) {
 	personalDeduction, _ := database.GetPersonalDeduction()
+	maxKReceipt, _ := database.GetKReceipt()
 	taxLevels := []models.TaxLevel{
 		{Level: "0-150,000", Tax: 0},
 		{Level: "150,001-500,000", Tax: 0},
@@ -30,11 +32,15 @@ func CalculateTaxLevel(totalIncome, wht float64, allowances []models.Allowance) 
 		case "donation":
 			if allowance.Amount > maxDonation {
 				allowance.Amount = maxDonation
+			} else if allowance.Amount < minDonation {
+				allowance.Amount = minDonation
+				totalDonation += allowance.Amount
 			}
-			totalDonation += allowance.Amount
 		case "k-receipt":
 			if allowance.Amount > maxKReceipt {
 				allowance.Amount = maxKReceipt
+			} else if allowance.Amount < minKReceipt {
+				allowance.Amount = minKReceipt
 			}
 			totalKReceipt += allowance.Amount
 		}
