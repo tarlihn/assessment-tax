@@ -8,7 +8,7 @@ import (
 )
 
 func TaxController(c echo.Context) error {
-	req := new(models.RequestBody)
+	req := new(models.UserRequest)
 	if err := c.Bind(req); err != nil {
 		return err
 	}

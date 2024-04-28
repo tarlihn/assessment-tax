@@ -10,12 +10,17 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type Postgres struct {
+	Db *sql.DB
+}
+
 // ConnectDB establishes a connection to the PostgreSQL database using the DATABASE_URL environment variable.
-func ConnectDB() (*sql.DB, error) {
+func ConnectDB() (*Postgres, error) {
 	// Retrieve DATABASE_URL from environment
 	url := os.Getenv("DATABASE_URL")
 	if url == "" {
-		return nil, fmt.Errorf("DATABASE_URL environment variable not set")
+		url = "host=localhost port=5432 user=postgres password=postgres dbname=ktaxes sslmode=disable" //for test
+		// return fmt.Errorf("DATABASE_URL environment variable not set")
 	}
 
 	// Open a connection to the database
@@ -30,5 +35,5 @@ func ConnectDB() (*sql.DB, error) {
 		return nil, fmt.Errorf("error pinging the database: %v", err)
 	}
 
-	return db, nil
+	return &Postgres{Db: db}, nil
 }
