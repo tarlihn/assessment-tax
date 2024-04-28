@@ -11,11 +11,7 @@ const (
 )
 
 func CalculateTax(totalIncome, wht float64, allowances []models.Allowance) (interface{}, error) {
-	personalDeduction, err := database.GetPersonalDeduction(database.DB)
-	if err != nil {
-		return nil, err
-	}
-
+	personalDeduction, _ := database.GetPersonalDeduction()
 	taxLevels := []models.TaxLevel{
 		{Level: "0-150,000", Tax: 0},
 		{Level: "150,001-500,000", Tax: 0},
@@ -76,10 +72,10 @@ func CalculateTax(totalIncome, wht float64, allowances []models.Allowance) (inte
 	tax -= wht
 	// var response interface{}
 	if tax < 0 {
-		return models.RefundResponse{Refund: -tax, TaxLevel: taxLevels}, nil
+		return &models.RefundResponse{Refund: -tax, TaxLevel: taxLevels}, nil
 	}
 
-	return models.TaxResponse{Tax: tax, TaxLevel: taxLevels}, nil
+	return &models.TaxResponse{Tax: tax, TaxLevel: taxLevels}, nil
 
 }
 

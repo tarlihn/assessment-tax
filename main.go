@@ -16,18 +16,40 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	_ "github.com/lib/pq"
 )
 
-func main() {
-
+func createDB() error {
 	// Establish connection to the database
-	err := database.ConnectDB()
+	p, err := database.ConnectDB()
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	defer p.Db.Close()
 	// Database connection successful
 	log.Println("Connected to the database successfully!")
+
+	createTb := `CREATE TABLE IF NOT EXISTS allowance ( id SERIAL PRIMARY KEY, personalDeduction INT);`
+	_, err = p.Db.Exec(createTb)
+
+	if err != nil {
+		log.Fatal("can't create table", err)
+	}
+	fmt.Println("create table success")
+
+	row := p.Db.QueryRow("INSERT INTO  allowance (personalDeduction) values ($1)  RETURNING id", 60000)
+	var id int
+	err = row.Scan(&id)
+	if err != nil {
+		fmt.Println("can't scan id", err)
+		return err
+	}
+	fmt.Println("insert todo success id : ", id)
+	return nil
+}
+func main() {
+
+	createDB()
 
 	e := echo.New()
 
@@ -48,11 +70,15 @@ func main() {
 	admin.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
 		adminUsername := os.Getenv("ADMIN_USERNAME")
 		adminPassword := os.Getenv("ADMIN_PASSWORD")
+		if adminUsername == "" {
+			adminUsername = "adminTax" //for test
+		}
+		if adminPassword == "" {
+			adminPassword = "admin!" //for test
+		}
 		return username == adminUsername && password == adminPassword, nil
 	}))
 	admin.POST("/deductions/personal", database.UpdatePersonalDeduction)
-
-	e.Logger.Fatal(e.Start(":1323"))
 
 	// Retrieve port from environment variable or default to 8080
 	port := os.Getenv("PORT")
