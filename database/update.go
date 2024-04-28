@@ -83,7 +83,7 @@ func UpdateMaximumKReceipt(c echo.Context) error {
 	}
 
 	// Prepare the desired response format
-	response := map[string]float64{"kReceipt": amount}
+	response := &models.AdminResponseKReciept{KReciept: amount}
 
 	// Return the response with HTTP status OK (200)
 	return c.JSON(http.StatusOK, response)
